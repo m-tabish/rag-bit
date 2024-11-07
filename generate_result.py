@@ -85,8 +85,7 @@ def generate_result(query_text, text):
         
         # Invoke the model
         answer = model.invoke(prompt_message)
-        print("Answer:", answer.content)
-        
+         
         return answer.content  # Return the response content
     
     except Exception as e:
