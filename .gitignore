@@ -12,3 +12,5 @@ venv/
 venv/
 *.pyc
 __pycache__/
+functions/
+etc/
