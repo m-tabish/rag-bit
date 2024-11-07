@@ -1,0 +1,14 @@
+.env
+
+_pycache
+chroma
+Include
+Lib
+Scripts
+share
+
+RAG/
+venv/
+venv/
+*.pyc
+__pycache__/

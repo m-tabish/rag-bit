@@ -1,0 +1,9 @@
+# Activate your virtual environment first
+# For Windows
+.\venv\Scripts\activate
+
+# For MacOS/Linux
+source venv/bin/activate
+
+# Then, generate requirements.txt
+pip freeze > requirements.txt
