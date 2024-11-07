@@ -82,12 +82,3 @@ st.markdown(
         """,
         unsafe_allow_html=True,
     )
-
-
-# Instructions for running the Streamlit app
-'''
-.\Scripts\deactivate
-.\Scripts\activate
-
-streamlit run main.py
-'''
