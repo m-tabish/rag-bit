@@ -20,7 +20,6 @@ colorama==0.4.6
 coloredlogs==15.0.1
 dataclasses-json==0.6.7
 Deprecated==1.2.14
-python-dotenv
 docstring_parser==0.16
 durationpy==0.9
 fastapi==0.115.4
