@@ -43,7 +43,7 @@ def main(user_input, documents):
     '''----------------------------------------------------------'''
 
 # Streamlit app title
-st.markdown("""<h1 style="text-align:center; font-family:monospace;">RAGBOT</h1>""", unsafe_allow_html=True)
+st.markdown("""<h1 style="text-align:center; font-family:monospace;">Answer Bot</h1>""", unsafe_allow_html=True)
 
 # Multi-line text input for user query
 user_input = st.text_area("What would you like to search?")
