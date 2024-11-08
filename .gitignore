@@ -15,4 +15,16 @@ __pycache__/
 functions/
 etc/
 .vscode/
+
+
 uploaded_files/
+
+../.vscode/
+../Include/
+../Lib/
+../Scripts/
+../__pycache__
+../__pycache__/
+../chroma/
+../etc/
+../share/
