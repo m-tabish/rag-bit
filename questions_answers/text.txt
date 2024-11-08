@@ -1,0 +1,21 @@
+PDF : Attention is all you need
+
+
+Question: What is the main contribution of the "Attention Is All You Need" paper?
+
+Answer:The main contribution of the "Attention Is All You Need" paper is the introduction of the Transformer, a novel neural network architecture that relies solely on attention mechanisms, dispensing with recurrence and convolutions entirely.
+
+Question: What are transformers
+
+Answer:The Transformer is a neural network architecture that uses attention mechanisms to compute representations of its input and output without using sequence-aligned RNNs or convolution.
+
+Question: How does the Transformer architecture differ from traditional sequence-to-sequence models?
+
+Answer to your query:
+The Transformer architecture eschews recurrence, unlike traditional sequence-to-sequence models.
+ 
+Question:What are the key components of the Transformer model?
+
+Answer: The Transformer model consists of two key components: an encoder and a decoder. The encoder is responsible for converting the input sequence into a fixed-length vector representation, while the decoder is responsible for generating the output sequence one token at a time. Both the encoder and decoder utilize multi-head self-attention layers, which allow them to capture relationships between different parts of the input or output sequence. Additionally, the encoder includes a positional encoding mechanism to preserve the order of the input tokens, while the decoder employs a masking mechanism to prevent the model from attending to future positions in the output sequence.
+
+
