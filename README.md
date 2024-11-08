@@ -33,15 +33,17 @@ To set up RAG-Bot locally, follow these steps:
    ```bash
    python -m venv venv
    source venv/bin/activate  # On Windows use  `venv\Scripts\activate`
-   pip install --quiet --upgrade langchain langchain-community langchain-chroma PyPDF2 langchain_google_genai
+   pip install --quiet --upgrade langchain langchain-community langchain-chroma PyPDF2 langchain_google_genai streamlit
 
    ```
 
 3. Install Required Packages:
+
    ```bash
    pip install -r requirements.txt
 
    ```
+
 4. Set Up Environment Variables:
    Create a .env file in the project root directory and add your API keys and other configuration settings as required by the application.
 
@@ -50,6 +52,6 @@ To set up RAG-Bot locally, follow these steps:
 To run the RAG-Bot, execute the following command in your terminal:
 
 ```bash
-python main.py
+streamlit run main.py
 
 ```
