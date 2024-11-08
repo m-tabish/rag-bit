@@ -1,13 +1,14 @@
-from langchain_huggingface import HuggingFaceEmbeddings  
+import PyPDF2
+from langchain.schema import Document
 from langchain.prompts.chat import ChatPromptTemplate
+from langchain_huggingface import HuggingFaceEmbeddings  
 from langchain_google_genai import ChatGoogleGenerativeAI
-from langchain_community.vectorstores import Chroma 
+from langchain_chroma import Chroma 
 from langchain.schema import HumanMessage
 import os
 import shutil
-
 from dotenv import load_dotenv
-from langchain_text_splitters import RecursiveCharacterTextSplitter 
+from langchain_text_splitters import RecursiveCharacterTextSplitter
 
 # Load environment variables from .env file
 load_dotenv()
@@ -28,32 +29,30 @@ Answer the question based only on the following context:
 
 Answer the question based on the above context: {question}
 """
- 
-def generate_result(query_text, text):
-    texts= text.split("\n")
-    # Initializing the RecursiveCharacterTextSplitter
-    text_splitter = RecursiveCharacterTextSplitter(
-        chunk_size=1000,    
-        chunk_overlap=100,
-        length_function=len,
-        add_start_index=True 
-    ) 
-    
-    # Initialize embedding function and Chroma vector store
+
+# Function to process and extract text from a PDF file and return Document objects
+def extract_text_from_pdf_to_documents(pdf_path):
+    with open(pdf_path, "rb") as file:
+        reader = PyPDF2.PdfReader(file)
+        documents = []
+        for page_num, page in enumerate(reader.pages):
+            text = page.extract_text()
+            if text:
+                # Create a Document object for each page with the extracted text
+                doc = Document(page_content=text)
+                documents.append(doc)
+    return documents
+
+# Function to generate results from the documents
+def generate_result(query_text, documents):
+    text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=100)
+
     embedding_function = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
     
-    # Split the text into chunks
-    for text in texts:
-        chunks = text_splitter.split_text(text)
-        
-        # Clear out DB if it exists
-        if os.path.exists(CHROMA_PATH):
-            vector_store = Chroma(persist_directory=CHROMA_PATH,embedding_function=embedding_function)
-        else:
-            vector_store = Chroma.from_texts(chunks, embedding_function, persist_directory=CHROMA_PATH)
-        
-    
-    print(f"Successfully stored {len(chunks)} documents and embeddings in ChromaDB!")
+     
+    vector_store = Chroma.from_documents(documents, embedding_function, persist_directory=CHROMA_PATH)
+
+    print(f"Successfully stored {len(documents)} documents and embeddings in ChromaDB!")
     
     # Initialize Gemini model
     model = ChatGoogleGenerativeAI(model="gemini-pro", google_api_key=GEMINI_API_KEY)  # type: ignore
@@ -65,14 +64,21 @@ def generate_result(query_text, text):
             return ""
         
         # Perform similarity search
-        results = vector_store.similarity_search_with_relevance_scores(query_text, k=5)
+        results = vector_store.similarity_search_with_relevance_scores(query_text, k=10)
         
         if len(results) == 0:
             print("No matching results found.")
             return ""
         
         print("Search Results:")
-         
+        
+        # Print out each result (document and relevance score)
+        for idx, (doc, score) in enumerate(results, 1):
+            print(f"Result {idx}:")
+            print(f"Relevance Score: {score}")
+            print(f"Document Content: {doc.page_content[:300]}...")  # Print first 300 chars of the document content
+            print("="*50) 
+        
         # Prepare context text from results
         context_text = "\n\n---\n\n".join([doc.page_content for doc, _score in results])
         
@@ -85,19 +91,22 @@ def generate_result(query_text, text):
         
         # Invoke the model
         answer = model.invoke(prompt_message)
-         
+        print("Answer:", answer.content)
         return answer.content  # Return the response content
     
     except Exception as e:
         print("Exception in loading and finding similarity:", e)
         return ""
 
-# Example usage (uncomment to use)
-# if __name__ == "__main__":
-#     query = "Subjects in I year"
-#     text = load_text()  # Make sure this is defined, or replace with your document-loading logic
-#     generate_result(query, text)  
-
-
-
-# Function to process the uploaded PDF file and extract text
+# Example of using the function
+if __name__ == "__main__":
+    # Sample query
+    query = "What is deep learning?"
+    
+    # Load documents from the PDF
+    pdf_path = "path_to_your_pdf.pdf"  # Replace with your actual PDF file path
+    documents = extract_text_from_pdf_to_documents(pdf_path)
+    
+    # Generate result using the documents
+    result = generate_result(query, documents)
+    print("Final Answer:", result)
