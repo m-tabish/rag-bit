@@ -4,7 +4,7 @@ sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
 import os
 import shutil
 from dotenv import load_dotenv 
-from generate_result import generate_result  # Assuming the function is available in this file
+from generate_result import generate_result   
 import streamlit as st
 from io import BytesIO
 from PyPDF2 import PdfReader
