@@ -1,3 +1,6 @@
+__import__(pysqlite3)
+import sys
+sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
 import os
 import shutil
 from dotenv import load_dotenv 
@@ -11,7 +14,11 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 # Load environment variables from .env file
 load_dotenv()
 
+
+
 # Constants
+
+
 CHROMA_PATH = "chroma"
 UPLOAD_DIR = "./uploaded_files"
 os.makedirs(UPLOAD_DIR, exist_ok=True)
