@@ -18,4 +18,6 @@ Question:What are the key components of the Transformer model?
 
 Answer: The Transformer model consists of two key components: an encoder and a decoder. The encoder is responsible for converting the input sequence into a fixed-length vector representation, while the decoder is responsible for generating the output sequence one token at a time. Both the encoder and decoder utilize multi-head self-attention layers, which allow them to capture relationships between different parts of the input or output sequence. Additionally, the encoder includes a positional encoding mechanism to preserve the order of the input tokens, while the decoder employs a masking mechanism to prevent the model from attending to future positions in the output sequence.
 
+Question: What are encoders?
+Answer: Encoders are the first part of the Transformer model and are responsible for converting the input sequence into a fixed-length vector. They are composed of a stack of identical layers, each of which consists of a self-attention sub-layer and a feed-forward sub-layer. The self-attention sub-layer allows the model to attend to different positions in the input sequence, while the feed-forward sub-layer is a simple fully connected network. The output of the encoder is a fixed-length vector that represents the input sequence.
 

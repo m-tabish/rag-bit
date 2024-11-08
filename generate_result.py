@@ -72,14 +72,14 @@ def generate_result(query_text, documents):
             print("No matching results found.")
             return ""
         
-        print("Search Results:")
+        # print("Search Results:")
         
         # Print out each result (document and relevance score)
-        for idx, (doc, score) in enumerate(results, 1):
-            print(f"Result {idx}:")
-            print(f"Relevance Score: {score}")
-            print(f"Document Content: {doc.page_content[:300]}...")  # Print first 300 chars of the document content
-            print("="*50) 
+        # for idx, (doc, score) in enumerate(results, 1):
+        #     print(f"Result {idx}:")
+        #     print(f"Relevance Score: {score}")
+        #     print(f"Document Content: {doc.page_content[:300]}...")  # Print first 300 chars of the document content
+        #     print("="*50) 
         
         # Prepare context text from results
         context_text = "\n\n---\n\n".join([doc.page_content for doc, _score in results])
@@ -93,7 +93,7 @@ def generate_result(query_text, documents):
         
         # Invoke the model
         answer = model.invoke(prompt_message)
-        print("Answer:", answer.content)
+         
         return answer.content  # Return the response content
     
     except Exception as e:
