@@ -34,7 +34,7 @@ Answer the question based on the above context: {question}
 
 # Function to process and extract text from a PDF file and return Document objects
 def extract_text_from_pdf_to_documents(pdf_path):
-    with open(pdf_path, "rb") as file:
+    with open(pdf_path, "rb") as file:  
         reader = PyPDF2.PdfReader(file)
         documents = []
         for page_num, page in enumerate(reader.pages):
