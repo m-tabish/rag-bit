@@ -28,3 +28,6 @@ uploaded_files/
 ../chroma/
 ../etc/
 ../share/
+
+render.yaml
+pyproject.toml
