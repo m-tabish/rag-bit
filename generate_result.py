@@ -33,23 +33,23 @@ Answer the question based on the above context: {question}
 """
 
 # Function to process and extract text from a PDF file and return Document objects
-def extract_text_from_pdf_to_documents(pdf_path):
-    with open(pdf_path, "rb") as file:  
-        reader = PyPDF2.PdfReader(file)
-        documents = []
-        for page_num, page in enumerate(reader.pages):
-            text = page.extract_text()
-            if text:
-                # Create a Document object for each page with the extracted text
-                doc = Document(page_content=text)
-                documents.append(doc)
-    return documents
+# def extract_text_from_pdf_to_documents(pdf_path):
+#     with open(pdf_path, "rb") as file:  
+#         reader = PyPDF2.PdfReader(file)
+#         documents = []
+#         for page_num, page in enumerate(reader.pages):
+#             text = page.extract_text()
+#             if text:
+#                 # Create a Document object for each page with the extracted text
+#                 doc = Document(page_content=text)
+#                 documents.append(doc)
+#     return documents
 
 # Function to generate results from the documents
-def generate_result(query_text, documents):
-    text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=100)
-
+def generate_result(query_text, documents): 
+    
     embedding_function = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
+    
     
      
     vector_store = Chroma.from_documents(documents, embedding_function, persist_directory=CHROMA_PATH)
@@ -101,15 +101,15 @@ def generate_result(query_text, documents):
         return ""
 
 # Example of using the function
-if __name__ == "__main__":
-    # Sample query
-    query = "What is deep learning?"
+# if __name__ == "__main__":
+#     # Sample query
+#     query = "What is deep learning?"
     
-    # Load documents from the PDF
-    pdf_path = "path_to_your_pdf.pdf"  # Replace with your actual PDF file path
-    documents = extract_text_from_pdf_to_documents(pdf_path)
+#     # Load documents from the PDF
+#     pdf_path = "path_to_your_pdf.pdf"  # Replace with your actual PDF file path
+#     documents = extract_text_from_pdf_to_documents(pdf_path)
     
-    # Generate result using the documents
-    result = generate_result(query, documents)
-    print("Final Answer:", result)
+#     # Generate result using the documents
+#     result = generate_result(query, documents)
+#     print("Final Answer:", result)
 	

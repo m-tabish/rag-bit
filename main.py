@@ -1,35 +1,43 @@
-
 import os
-import shutil
-from dotenv import load_dotenv 
-from generate_result import generate_result   
+from dotenv import load_dotenv
+from generate_result import generate_result
 import streamlit as st
-from io import BytesIO
 from PyPDF2 import PdfReader
 from langchain.schema import Document
-from langchain_text_splitters import RecursiveCharacterTextSplitter
 
 # Load environment variables from .env file
 load_dotenv()
 
-
-
 # Constants
-
-
 CHROMA_PATH = "chroma"
-UPLOAD_DIR = "./uploaded_files"
-os.makedirs(UPLOAD_DIR, exist_ok=True)
+KNOWLEDGE_BASE = os.path.abspath("./knowledgeBase")
+PDF_FILE_NAME = "attention-is-all-you-need.pdf"  # Replace with your PDF file name
+PDF_FILE_PATH = os.path.join(KNOWLEDGE_BASE, PDF_FILE_NAME)
 
-# Function to convert extracted text into Document objects
-def extract_text_to_documents(file_bytes):
-    '''Converts text from PDF to Document objects'''
-    pdf_reader = PdfReader(BytesIO(file_bytes))
+# Ensure the knowledge base directory exists
+os.makedirs(KNOWLEDGE_BASE, exist_ok=True)
+
+# Function to process and extract text from a PDF file and return Document objects
+def extract_text_from_pdf_to_documents(pdf_path):
     documents = []
-    for page in pdf_reader.pages:
-        text = page.extract_text()
-        if text:
-            documents.append(Document(page_content=text))
+    try:
+        # Check if the PDF file exists before trying to open it
+        if not os.path.isfile(pdf_path):
+            st.error(f"The file {pdf_path} does not exist.")
+            return documents
+        
+        with open(pdf_path, "rb") as file:  
+            reader = PdfReader(file)
+            for page_num, page in enumerate(reader.pages):
+                text = page.extract_text()
+                if text:
+                    # Create a Document object for each page with the extracted text
+                    doc = Document(page_content=text)
+                    documents.append(doc)
+    except PermissionError:
+        st.error(f"Permission denied when trying to access {pdf_path}. Please check your permissions.")
+    except Exception as e:
+        st.error(f"An error occurred: {e}")
     return documents
 
 # Main function for generating embeddings and searching results
@@ -41,45 +49,25 @@ def main(user_input, documents):
     '''----------------------------------------------------------'''
 
 # Streamlit app title
-st.markdown("""<h1 style="text-align:center; font-family:monospace;">Answer Bot</h1>""", unsafe_allow_html=True)
-
+st.markdown("""<h1 style="text-align:center; font-family:monospace;">Answer Bot 🤖</h1>""", unsafe_allow_html=True)
+st.markdown(
+    """
+    <div style="text-align: center; font-size:24px">
+        <h5>The bot take the knowledge from "Attention is all you need" Research Paper</h5> 
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
 # Multi-line text input for user query
 user_input = st.text_area("What would you like to search?")
 
-# File uploader
-uploaded_file = st.file_uploader("Choose a file", type=["pdf", "txt", "png", "jpg", "jpeg", "csv"])
+# Variable to store the extracted text from the specified PDF file in KNOWLEDGE_BASE
+documents = extract_text_from_pdf_to_documents(PDF_FILE_PATH)
 
-# Variable to store the extracted text
-documents = []
-
-# Process the file once it is uploaded
-if uploaded_file is not None:
-    try:
-        # Handle PDF files
-        if uploaded_file.type == "application/pdf":
-            file_bytes = uploaded_file.read()
-            documents = extract_text_to_documents(file_bytes)
-            st.write(f"Extracted text from {len(documents)} pages.")
-
-        # Handle text files (txt)
-        elif uploaded_file.type == "text/plain":
-            text = uploaded_file.getvalue().decode("utf-8")
-            documents = [Document(page_content=text)]
-            st.write("Extracted text (first 100 characters):", text[:100])
-
-        # You can add other file types (like image, CSV, etc.) here if necessary
-
-        # If there is extracted text, perform the main processing
-        if documents:
-            st.write("Processing your query...")
-            with st.spinner('Generating results...'):
-                result = main(user_input, documents)  # Generate results from the query
-            
-            st.write("Answer to your query:")
-            st.write(result)
-
-    except Exception as e:
-        st.error(f"An error occurred: {e}")
+# Process user input if any documents are available
+if user_input and documents:
+    result = main(user_input, documents)
+    st.write(result)
 
 # Footer for the app
 st.markdown(
@@ -90,4 +78,3 @@ st.markdown(
     """,
     unsafe_allow_html=True,
 )
-
