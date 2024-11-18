@@ -33,7 +33,7 @@ To set up RAG-Bot locally, follow these steps:
    ```bash
    python -m venv venv
    source venv/bin/activate  # On Windows use  `venv\Scripts\activate`
-   pip install --quiet --upgrade langchain langchain-community langchain-chroma PyPDF2 langchain_google_genai streamlit
+   pip install --quiet --upgrade langchain langchain-community langchain-chroma PyPDF2 langchain_google_genai streamlit langchain_huggingface
 
    ```
 

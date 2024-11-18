@@ -11,7 +11,7 @@ load_dotenv()
 # Constants
 CHROMA_PATH = "chroma"
 KNOWLEDGE_BASE = os.path.abspath("./knowledgeBase")
-PDF_FILE_NAME = "attention-is-all-you-need.pdf"  # Replace with your PDF file name
+PDF_FILE_NAME = "knwoledge-base.pdf"  # Replace with your PDF file name
 PDF_FILE_PATH = os.path.join(KNOWLEDGE_BASE, PDF_FILE_NAME)
 
 # Ensure the knowledge base directory exists
@@ -53,7 +53,7 @@ st.markdown("""<h1 style="text-align:center; font-family:monospace;">Answer Bot 
 st.markdown(
     """
     <div style="text-align: center; font-size:24px">
-        <h5>The bot take the knowledge from "Attention is all you need" Research Paper</h5> 
+        <h5>The bot takes the knowledge from "Attention is all you need" Research Paper</h5> 
     </div>
     """,
     unsafe_allow_html=True,
